@@ -1,0 +1,14 @@
+.button{
+    width: 60%;
+    border-radius: 20px;
+    border: none;
+    padding: 10px 0;
+    background-color: rgb(52, 141, 126);
+
+}
+.button-login{
+    margin: 0;
+    text-transform: uppercase;
+    color: #FFF;
+    font-weight: bold;
+}

@@ -1,0 +1,25 @@
+.container{
+	max-width: 100%;
+}
+.header-vendas{
+	padding: 15px;
+    background: #3daa9899;
+}
+.header-vendedor{
+	font-size: 20px;
+    font-weight: bold;
+    color: #fbfafa;
+    letter-spacing: 1.4px;
+}
+.main-vendas{
+	padding: 30px;
+}
+.itens{
+	border-right: 1px groove #3daa9899;
+}
+.footer{
+	position: relative;
+    bottom: 0;
+    right: 0;
+    margin: 140% 0 0 0;
+}
