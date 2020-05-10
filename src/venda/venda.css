@@ -17,6 +17,31 @@
 .itens{
 	border-right: 1px groove #3daa9899;
 }
+.listIten{
+    padding: 5px 0;
+}
+.buttonList{
+    background-color: #9E9E9E;
+    color: #FFF;
+    border: #ccc;
+}
+.buttonList:hover, .buttonFinaliza:hover, .buttonCancela:hover{
+    background-color: black;
+    color: #fff;
+}
+.buttonFinaliza{
+    background-color: #4CAF50;
+    border: #FFF;
+}
+.buttonCancela{
+    background-color: red;
+    border: #FFF;
+}
+#input{
+    position: absolute;
+    bottom: -23px;
+    padding: 5px;
+}
 .footer{
 	position: relative;
     bottom: 0;

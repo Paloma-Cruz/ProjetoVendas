@@ -15,10 +15,15 @@ class Venda extends React.Component {
                     codigo: '123456',
                     qtd: 1,
                     valorUn: 70,
-                    valor: 70 
+                    valor:  70
                 }
             ],
-            codigo: ''
+            comprador: [
+                {
+                    name: "Ariel Zimbrão",
+                    cpf: "156.125.577-79"
+                }
+            ]
         }
 
     }
@@ -39,15 +44,15 @@ class Venda extends React.Component {
                                 {
                                     this.state.produtos.map((item) => {
                                         return (
-                                            <Row>
+                                            <Row className="listIten">
                                                 <Col>
                                                     { item.name }
                                                 </Col>
                                                 <Col>
                                                     <Row>
-                                                        <Col><Button onClick={() => this.alterarQtd(item.id, '-')}>-</Button></Col>
+                                                        <Col><Button className="buttonList" onClick={() => this.alterarQtd(item.id, '-')}>-</Button></Col>
                                                         <Col>{ item.qtd }</Col>
-                                                        <Col><Button onClick={() => this.alterarQtd(item.id, '+')}>+</Button></Col>
+                                                        <Col><Button className="buttonList" onClick={() => this.alterarQtd(item.id, '+')}>+</Button></Col>
                                                     </Row>
                                                 </Col>
                                                 <Col>
@@ -57,7 +62,7 @@ class Venda extends React.Component {
                                                     { item.valor }
                                                 </Col>
                                                 <Col>
-                                                    <Button onClick={() => this.excluirItem(item.id)}>Excluir</Button>
+                                                    <Button className="buttonList" onClick={() => this.excluirItem(item.id)}>Excluir</Button>
                                                 </Col>
                                             </Row>
                                         )
@@ -67,12 +72,12 @@ class Venda extends React.Component {
 
                         </Row>
                         <Row>
-                            <InputGroup className="mb-3" >
+                            <InputGroup className="mb-3" id="input">
                                 <FormControl
-                                    placeholder="Recipient's username"
+                                    placeholder="Insira o código de barra"
                                     aria-label="Recipient's username"
                                     aria-describedby="basic-addon2"
-                                    onChange={(event) => this.setState({codigo: event.currentTarget.value})}
+                                    onChange={(event) => this.setState({codigo: event.currentTarget.value})} 
                                     type="text"
                                 />
                                 <InputGroup.Append>
@@ -86,11 +91,19 @@ class Venda extends React.Component {
                     <Col>
 
                         <Row>
-                            <Col>Comprador: Ariel</Col>
+                            <Col>
+                                <InputGroup className="mb-3" >
+                                    <FormControl className="informatColab" placeholder="Nome do Comprador"/>
+                                </InputGroup>
+                            </Col>
                         </Row>
 
                         <Row>
-                            <Col>CPF: 156.125.577-79</Col>
+                            <Col>
+                                <InputGroup>
+                                    <FormControl placeholder="CPF do Comprador"/>
+                                </InputGroup>
+                            </Col>
                         </Row>
 
                         <div className="footer">
@@ -100,8 +113,8 @@ class Venda extends React.Component {
                             </Row>
 
                             <Row className="option">
-                                <Col xs="auto"><Button color="success">Finalizar</Button></Col>
-                                <Col xs="auto"><Button color="danger">Cancelar</Button></Col>
+                                <Col xs="auto"><Button className="buttonFinaliza">Finalizar</Button></Col>
+                                <Col xs="auto"><Button className="buttonCancela">Cancelar</Button></Col>
                             </Row>
 
                         </div>
@@ -130,7 +143,7 @@ class Venda extends React.Component {
     precoTotal(){
         let total = 0;
         this.state.produtos.forEach(element => {
-            total =+ element.valor;            
+            total += element.valor;            
         });
         return total;
     }
@@ -138,17 +151,32 @@ class Venda extends React.Component {
     inserirItem(ethis){
         axios.get('http://localhost:8000/produtos?codigo=' + ethis.state.codigo)
         .then(res => {
-            console.log(res.data)
+            let contido = false;
             if(res.data){
-                let produto = ethis.state.produtos;
-                produto.push(res.data);
-                ethis.setState({
-                    produtos: produto
-                })
-            }
+                ethis.state.produtos.forEach(element => {
+                    if(res.data.codigo === element.codigo){
+                        contido = true;
+                    }
+                });
+                if(!contido){
+                    let produto = ethis.state.produtos;
+                    produto.push(res.data);
+                    ethis.setState({
+                        produtos: produto
+                    })
+                    this.limparItem();
+                } else {
+                    this.alterarQtd(res.data.id, '+');
+                }
+            } 
+
         }).catch(err => {
            console.error(err); 
         })
+    }
+
+    limparItem(ethis) {
+        ethis.value = '';
     }
 
     alterarQtd(id, sinal){
@@ -180,10 +208,11 @@ class Venda extends React.Component {
         })
 
 
-        if (upd) this.setState({
+        if(upd) this.setState({
             produtos: produto
         })
     }
+    
 }
 
 export default Venda;
