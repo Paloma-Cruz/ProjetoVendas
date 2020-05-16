@@ -56,14 +56,15 @@ class Login extends React.Component {
     validation(){
         let email = document.getElementById('email').value;
         let password = document.getElementById('password').value;
+        let name = "";
         if(email === '' && password === ''){
-            alert('Preencha');
+            alert('Preencha os campos de e-mail e senha');
         } else if ((email !== '' && password === '') || (email === '' && password !== '')) {
-            alert('Preencha Jumento');
+            alert('Preencha os campos de e-mail e senha');
         } else {
             axios.post('http://localhost:8000/auth' , {
                email: email,
-               password: password 
+               password: password,
             }).then(res => {
                 if(res.data){
                     return (

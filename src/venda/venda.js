@@ -8,22 +8,9 @@ class Venda extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            produtos: [
-                {
-                    id: 1,
-                    name: "Calça Jeans Renner",
-                    codigo: '123456',
-                    qtd: 1,
-                    valorUn: 70,
-                    valor:  70
-                }
-            ],
-            comprador: [
-                {
-                    name: "Ariel Zimbrão",
-                    cpf: "156.125.577-79"
-                }
-            ]
+            funcionario: [],
+            produtos: [],
+            comprador: []
         }
 
     }
@@ -33,12 +20,32 @@ class Venda extends React.Component {
             <Container>
 
                 <Row className="header-vendas">
-                    <Col className="header-vendedor">Vendedora: Paloma</Col>
+                    {
+                        this.state.funcionario.map((pessoa) => {
+                            return (
+                                
+                                <Col className="header-vendedor">
+
+                                    { pessoa.funcao + ": " + pessoa.name }
+
+                                </Col>
+
+                            )
+                        })
+                    }
                 </Row>
 
                 <Row className="main-vendas">
 
                     <Col xs lg="9" className="itens">
+
+                        <Row>
+                            <Col>Nome do Produto</Col>
+                            <Col>Quantidade</Col>
+                            <Col>Valor unit</Col>
+                            <Col>Valor</Col>
+                        </Row>
+                        
                         <Row>
                             <Col>
                                 {
@@ -74,6 +81,7 @@ class Venda extends React.Component {
                         <Row>
                             <InputGroup className="mb-3" id="input">
                                 <FormControl
+                                    id="Form"
                                     placeholder="Insira o código de barra"
                                     aria-label="Recipient's username"
                                     aria-describedby="basic-addon2"
@@ -114,7 +122,7 @@ class Venda extends React.Component {
 
                             <Row className="option">
                                 <Col xs="auto"><Button className="buttonFinaliza">Finalizar</Button></Col>
-                                <Col xs="auto"><Button className="buttonCancela">Cancelar</Button></Col>
+                                <Col xs="auto"><Button className="buttonCancela" onClick={() => this.cancelar()}>Cancelar</Button></Col>
                             </Row>
 
                         </div>
@@ -140,6 +148,30 @@ class Venda extends React.Component {
         })
     }
 
+    cancelar(){
+        let produtos = this.state.produtos.filter(
+            (item) => item.id == null
+        );
+        let comprador = this.state.comprador.filter(
+            (pessoa) => pessoa.name == null
+        )
+        this.setState({
+            produtos: produtos,
+            comprador: comprador
+        })
+    }
+
+    limparInput(){
+        let produto = this.state.produtos;
+        let input = this.state.FormControl.filter(
+            (item) => item.codigo == produto.codigo
+        );
+        this.state({
+            
+        })
+    }
+
+
     precoTotal(){
         let total = 0;
         this.state.produtos.forEach(element => {
@@ -164,7 +196,8 @@ class Venda extends React.Component {
                     ethis.setState({
                         produtos: produto
                     })
-                    this.limparItem();
+                    let limpar = document.getElementById('Form').value;
+                    limpar.value = 0;
                 } else {
                     this.alterarQtd(res.data.id, '+');
                 }
@@ -173,10 +206,6 @@ class Venda extends React.Component {
         }).catch(err => {
            console.error(err); 
         })
-    }
-
-    limparItem(ethis) {
-        ethis.value = '';
     }
 
     alterarQtd(id, sinal){
